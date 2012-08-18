@@ -1,0 +1,38 @@
+body {
+position: relative;
+top: 75px;
+margin: auto;
+height: 500px;
+width: 500px;
+background: #CCC;
+font-size: larger;
+font-family: "Lucida Grande", "Lucida Sans Unicode", Geneva, sans-serif;
+}
+
+hr{
+margin: 3px -1px;
+}
+
+#html{
+min-height: 210px;
+background: white;
+border-radius: 15px 15px 0px 0px;
+padding: 25px;
+}
+
+#md{
+min-height: 210px;
+background: white;
+border-radius: 0px 0px 15px 15px;
+padding: 25px;
+}
+
+#textarea{
+  position: relative;
+  left: -25px;
+  top: -40px;
+  margin: 0px;
+  width: 500px;
+  height: 200px;
+  border: 0px;
+}

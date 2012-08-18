@@ -19,8 +19,9 @@ function markdown($string)
     );
 
     $rules['html'] = array(
-    '(\s(http(|s)://\S{0,64})\s)' => ' <a href=\'\1\'>\1</a> ',                                 // url
-    '(\s([a-zA-Z0-9.,+_-]{0,63}[@][a-zA-Z0-9.,-]{0,254})\s)' => ' <a href="mailto:\1">\1</a> '  // mail
+    '(\s(http(|s)://\S{0,64})\s)'                        => ' <a href="\1">\1</a> ',        // url
+    '(([a-zA-Z0-9.,+_-]{0,63}[@][a-zA-Z0-9.,-]{0,254}))' => ' <a href="mailto:\1">\1</a> ', // mail
+    '((\+)[0-9]{5,63})'                                  => ' <a href="tel:\0">call \0</a>' // phone
     );
 
 

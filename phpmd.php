@@ -19,9 +19,14 @@ function markdown($string)
     );
 
     $rules['html'] = array(
-    '(\s(http(|s)://\S{0,64})\s)'                        => ' <a href="\1">\1</a> ',        // url
-    '(([a-zA-Z0-9.,+_-]{0,63}[@][a-zA-Z0-9.,-]{0,254}))' => ' <a href="mailto:\1">\1</a> ', // mail
-    '((\+)[0-9]{5,63})'                                  => ' <a href="tel:\0">call \0</a>' // phone
+    '(\s(http(|s)://\S{0,64})\s)'                        => ' <a href="\1">\1</a> ',         // url
+    '(([a-zA-Z0-9.,+_-]{0,63}[@][a-zA-Z0-9.,-]{0,254}))' => ' <a href="mailto:\1">\1</a> ',  // mail
+    '((\+)[0-9]{5,63})'                                  => ' <a href="tel:\0">call \0</a>'  // phone
+    );
+
+    $rules['tweet'] = array(
+    '(@)(\S*)' => ' <a href="https://twitter.com/\3">\1</a> ',                          // user
+    '(#)(\S*)' => ' <a href="https://twitter.com/#!/search/?src=hash&q=%23\3">\1</a> '  // hashtag
     );
 
 

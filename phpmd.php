@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 function markdown($string)
   {
     $rules['sm'] = array(
-    '/(#+)(.*)/e'                        => 'md_header(\'\\1\', \'\\2\')',     // headers
+    '/\n(#+)(.*)/e'                      => 'md_header(\'\\1\', \'\\2\')',     // headers
     '/\[([^\[]+)\]\(([^\)]+)\)/'         => '<a href=\'\2\'>\1</a>',           // links
     '/(\*\*\*|___)(.*?)\1/'              => '<em><strong>\2</strong></em>',    // bold emphasis
     '/(\*\*|__)(.*?)\1/'                 => '<strong>\2</strong>',             // bold
@@ -24,14 +24,14 @@ function markdown($string)
     );
 
     $rules['html'] = array(
-    '(\s(http(|s)://\S{0,64})\s)'                        => ' <a href="\1">\1</a> ',         // url
-    '(([a-zA-Z0-9.,+_-]{0,63}[@][a-zA-Z0-9.,-]{0,254}))' => ' <a href="mailto:\1">\1</a> ',  // mail
-    '((\+)[0-9]{5,63})'                                  => ' <a href="tel:\0">call \0</a>'  // phone
+    '(\s+((http(|s)://\S{0,64})\s))'                          => ' <a href="\2">\2</a> ',         // url
+    '(\s+(([a-zA-Z0-9.,+_-]{1,63}[@][a-zA-Z0-9.,-]{0,254})))' => ' <a href="mailto:\2">\2</a> ',  // mail
+    '(\s+((\+)[0-9]{5,63}))'                                  => ' <a href="tel:\1">call \1</a>'  // phone
     );
 
     $rules['tweet'] = array(
-    '((@)(\S*))' => ' <a href=\'https://twitter.com/\3\'>\1</a> ',                          // user
-    '((#)(\S*))' => ' <a href=\'https://twitter.com/#!/search/?src=hash&q=%23\3\'>\1</a> '  // hashtag
+    '((@)(\S*))' => ' <a href=\'https://twitter.com/\2\'>\1\2</a> ',                          // user
+    '((#)(\S*))' => ' <a href=\'https://twitter.com/#!/search/?src=hash&q=%23\2\'>\1\2</a> '  // hashtag
     );
 
 
@@ -41,6 +41,7 @@ function markdown($string)
       {
         foreach($rule as $regex => $replace)
           {
+            //echo "$regex<br>";
             $string = preg_replace($regex, $replace, $string);
           }
       }

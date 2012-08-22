@@ -13,6 +13,22 @@ hr{
 margin: 3px -1px;
 }
 
+ul{
+  list-style: none;
+  background: #ddd;
+}
+
+/*
+ul:before{
+  content: 'collapse';
+}
+*/
+
+li{
+  background: #eee;
+  margin: 2px;
+}
+
 #html{
 min-height: 210px;
 background: white;

@@ -1,21 +1,26 @@
 <?php
 
+error_reporting(E_ALL);
+
 function markdown($string)
   {
     $rules['sm'] = array(
-    '/(#+)(.*)/e'                  => 'md_header(\'\\1\', \'\\2\')',     // headers
-    '/\[([^\[]+)\]\(([^\)]+)\)/'   => '<a href=\'\2\'>\1</a>',           // links
-    '/(\*\*|__)(.*?)\1/'           => '<strong>\2</strong>',             // bold
-    '/(\*|_)(.*?)\1/'              => '<em>\2</em>',                     // emphasis
-    '/\~\~(.*?)\~\~/'              => '<del>\1</del>',                   // del
-    '/\:\"(.*?)\"\:/'              => '<q>\1</q>',                       // quote
-    '/\n\*(.*)/e'                  => 'md_ulist(\'\\1\')',               // unorderd lists
-    '/\n[0-9]+\.(.*)/e'            => 'md_olist(\'\\1\')',               // orderd lists
-    '/\n&gt;(.*)/e'                => 'md_blockquote(\'\\1\')',          // blockquotes
-    '/\n([^\n]+)\n/e'              => 'md_paragraph(\'\\1\')',           // add paragraphs
-    '/<\/ul><ul>/'                 => '',                                // fix extra ul
-    '/<\/ol><ol>/'                 => '',                                // fix extra ol
-    '/<\/blockquote><blockquote>/' => "\n"                               // fix extra blockquote
+    '/(#+)(.*)/e'                        => 'md_header(\'\\1\', \'\\2\')',     // headers
+    '/\[([^\[]+)\]\(([^\)]+)\)/'         => '<a href=\'\2\'>\1</a>',           // links
+    '/(\*\*\*|___)(.*?)\1/'              => '<em><strong>\2</strong></em>',    // bold emphasis
+    '/(\*\*|__)(.*?)\1/'                 => '<strong>\2</strong>',             // bold
+    '/(\*|_)([\w| ]+)\1/'                => '<em>\2</em>',                     // emphasis
+    '/\~\~(.*?)\~\~/'                    => '<del>\1</del>',                   // del
+    '/\:\"(.*?)\"\:/'                    => '<q>\1</q>',                       // quote
+    '/\n([*]+)\s([[:print:]]*)/e'        => 'md_ulist(\'\\1\', \'\\2\')',      // unorderd lists
+    '/\n[0-9]+\.(.*)/e'                  => 'md_olist(\'\\1\')',               // orderd lists
+    '/\n&gt;(.*)/e'                      => 'md_blockquote(\'\\1\')',          // blockquotes
+    '/\n([^\n]+)\n/e'                    => 'md_paragraph(\'\\1\')',           // add paragraphs
+    '/<\/ul>(\s*)<ul>/'                  => '',                                // fix extra ul
+    '/(<\/li><\/ul><\/li><li><ul><li>)/' => '</li><li>',                       // fix extra ul li
+    '/(<\/ul><\/li><li><ul>)/'           => '',                                // fix extra ul li
+    '/<\/ol><ol>/'                       => '',                                // fix extra ol
+    '/<\/blockquote><blockquote>/'       => "\n"                               // fix extra blockquote
     );
 
     $rules['html'] = array(
@@ -25,12 +30,13 @@ function markdown($string)
     );
 
     $rules['tweet'] = array(
-    '(@)(\S*)' => ' <a href="https://twitter.com/\3">\1</a> ',                          // user
-    '(#)(\S*)' => ' <a href="https://twitter.com/#!/search/?src=hash&q=%23\3">\1</a> '  // hashtag
+    '((@)(\S*))' => ' <a href=\'https://twitter.com/\3\'>\1</a> ',                          // user
+    '((#)(\S*))' => ' <a href=\'https://twitter.com/#!/search/?src=hash&q=%23\3\'>\1</a> '  // hashtag
     );
 
 
     $string = "\n".$string."\n";
+
     foreach($rules as $rule)
       {
         foreach($rule as $regex => $replace)
@@ -48,9 +54,17 @@ function md_header ($chars, $header)
     return sprintf ('<h%d>%s</h%d>', $level, trim ($header), $level);
   }
 
-function md_ulist ($item)
+function md_ulist ($count, $string)
   {
-    return sprintf ("\n<ul>\n\t<li>%s</li>\n</ul>", trim ($item));
+    $return = trim($string);
+    $count  = strlen($count);
+    $i      = 0;
+    while($i != $count)
+      {
+        $return = '<ul><li>'.$return.'</li></ul>';
+        ++$i;
+      }
+    return $return;
   }
 
 function md_olist ($item)
